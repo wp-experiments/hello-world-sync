@@ -28,7 +28,7 @@ jobs:
     # Step 2: run the sync action
     - name: Sync upstream changes
       id: sync
-      uses: shreyapohekar/hello-world@v1
+      uses: aormsby/Fork-Sync-With-Upstream-action@v3.2
 
       with:
         target_sync_branch: master
