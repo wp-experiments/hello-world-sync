@@ -2,7 +2,7 @@ name: 'Upstream Sync'
 
 on:
   schedule:
-    - cron:  '*/2 * * * *'
+    - cron:  '*/10 * * * *'
     # scheduled at every 2 mins
 
   workflow_dispatch:  # click the button on Github repo!
@@ -28,7 +28,7 @@ jobs:
     # Step 2: run the sync action
     - name: Sync upstream changes
       id: sync
-      uses: shreyapohekar/hello-world@v3
+      uses: shreyapohekar/hello-world@v1
 
       with:
         target_sync_branch: master
