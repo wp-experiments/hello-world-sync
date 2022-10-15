@@ -25,5 +25,4 @@ jobs:
       with:
         upstream_repository: shreyapohekar/hello-world
         upstream_branch: master
-        target_branch: main                       # optional
         github_token: ${{ secrets.GITHUB_TOKEN }}
