@@ -74,7 +74,7 @@ jobs:
         
       # Run the "semgrep ci" command on the command line of the docker image.
       - run: |
-          semgrep ci --sarif
+          semgrep ci --sarif --error
           ls -la 
           ls -la hello-world-sync
           ls -la main
