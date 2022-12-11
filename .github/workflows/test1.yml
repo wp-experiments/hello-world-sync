@@ -23,7 +23,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           ls -la
-          ls -la hello-world-sync
+          ls -la test-semgrep
           echo "-------"
           mkdir __w/
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/basic_xss.yaml xss/basic_xss.yaml.gpg
