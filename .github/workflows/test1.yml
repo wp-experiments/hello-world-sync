@@ -1,36 +1,92 @@
-# This is a basic workflow to help you get started with Actions
+# Name of this GitHub Actions workflow.
+name: Semgrep
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
+  # Scan changed files in PRs (diff-aware scanning):
+  pull_request: {}
+  # Scan mainline branches and report all findings: 
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: ["master", "main"]
+  # Schedule the CI job (this method uses cron syntax):
+  schedule:
+    - cron: '30 0 1,15 * *' # Scheduled for 00:30 UTC on both the 1st and 15th of the month
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  decrypt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the plugin repo
+        uses: actions/checkout@v3
+        with:
+          repository: wp-experiments/hello-world-sync
+          path: hello-world-sync
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          ls -la
+          ls -la hello-world-sync
+          echo "-------"
+          mkdir __w/
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/basic_xss.yaml xss/basic_xss.yaml.gpg
+        env:
+          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      - name: listing the yaml file contents
+        run: cat __w/basic_xss.yaml
+      - uses: actions/upload-artifact@master
+        with:
+          name: my-path
+          path: __w/
+          
+  semgrep:
+    needs: decrypt
+    # User-definable name of this GitHub Actions job:
+    name: Scan
+    # If you are self-hosting, change the following `runs-on` value: 
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    container:
+      # A Docker image with Semgrep installed. Do not change this.
+      image: returntocorp/semgrep
+
+    # Skip any PR created by dependabot to avoid permission issues:
+    if: (github.actor != 'dependabot[bot]')
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Check out the plugin repo
+        uses: actions/checkout@v3
+        with:
+          repository: wp-experiments/hello-world-sync
+          path: hello-world-sync
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          ls -la
+          ls -la hello-world-sync
+          echo "-------"
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      # Fetch project source with GitHub Actions Checkout.
+      - name: Check out the current repo
+        uses: actions/checkout@v3
+        with:
+          path: main
+      - uses: actions/download-artifact@master
+        with:
+          name: my-path
+          path: __w/
+      - run: cat __w/basic_xss.yaml
+        
+      # Run the "semgrep ci" command on the command line of the docker image.
+      - run: |
+          semgrep ci --sarif
+          ls -la 
+          ls -la hello-world-sync
+          ls -la main
+          ls -la main/xss
+          pwd
+          
+        env:
+           # Add the rules that Semgrep uses by setting the SEMGREP_RULES environment variable. 
+           SEMGREP_RULES: __w/basic_xss.yaml  # more at semgrep.dev/explore
+           SEMGREP_REPO_NAME: 'wp-experiments/hello-world-sync'
+           # Uncomment SEMGREP_TIMEOUT to set this job's timeout (in seconds):
+           # Default timeout is 1800 seconds (30 minutes).
+           # Set to 0 to disable the timeout.
+           # SEMGREP_TIMEOUT: 300
