@@ -15,11 +15,11 @@ jobs:
   decrypt:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the plugin repo
+      - name: Check out the rules repo
         uses: actions/checkout@v3
         with:
-          repository: wp-experiments/hello-world-sync
-          path: hello-world-sync
+          repository: wp-experiments/test-semgrep
+          path: test-semgrep
           token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           ls -la
