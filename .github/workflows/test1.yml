@@ -24,7 +24,6 @@ jobs:
       - run: |
           ls -la
           ls -la test-semgrep
-          echo "-------"
           mkdir __w/
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/basic_xss.yaml test-semgrep/xss/basic_xss.yaml.gpg
         env:
