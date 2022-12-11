@@ -9,7 +9,7 @@ echo $a;
 
 // ok:test
 $b = $_GET['id'];
-echo (intval) $b;
+//echo (intval) $b;
 
 // ok:test
 $c = $_GET['id'];
