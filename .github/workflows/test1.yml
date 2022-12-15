@@ -33,7 +33,7 @@ jobs:
           done
           pwd
           #gpg --quiet --yes --passphrase="$PASSPHRASE" --decrypt-files *.gpg
-          #mv *.yaml __w/
+          ##mv *.yaml __w/
         env:
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       - name: listing the yaml file contents
