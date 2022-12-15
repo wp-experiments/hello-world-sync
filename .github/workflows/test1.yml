@@ -87,6 +87,19 @@ jobs:
           semgrep ci --sarif -o output.sarif || true
           ls -la 
           cat output.sarif
+      
+      - name: save report as pipeline artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: output.sarif
+          path: output.sarif
+
+        
+      - name: publish code scanning alerts
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: output.sarif
+          category: semgrep
           
         env:
            # Add the rules that Semgrep uses by setting the SEMGREP_RULES environment variable. 
