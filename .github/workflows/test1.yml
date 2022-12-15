@@ -27,7 +27,7 @@ jobs:
           mkdir __w/
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/basic_xss.yaml test-semgrep/xss/basic_xss.yaml.gpg
           cd test-semgrep
-          for FILE in *.*.yaml.gpg; do
+          for FILE in *; do
             gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/"${FILE%.gpg}" "$FILE"
           done
           pwd
