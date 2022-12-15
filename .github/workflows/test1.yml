@@ -86,6 +86,8 @@ jobs:
       - run: |
           semgrep ci --sarif -o output.sarif || true
           ls -la 
+          cat output.sarif
+          echo "-----"
           ls -la hello-world-sync
           ls -la main
           ls -la main/xss
