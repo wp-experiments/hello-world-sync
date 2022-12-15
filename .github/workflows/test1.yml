@@ -100,4 +100,4 @@ jobs:
            # Default timeout is 1800 seconds (30 minutes).
            # Set to 0 to disable the timeout.
            # SEMGREP_TIMEOUT: 300
-           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+           #SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
