@@ -87,12 +87,6 @@ jobs:
           semgrep ci --sarif -o output.sarif || true
           ls -la 
           cat output.sarif
-          echo "-----"
-          ls -la hello-world-sync
-          ls -la main
-          ls -la main/xss
-          pwd
-          cat output.sarif
           
         env:
            # Add the rules that Semgrep uses by setting the SEMGREP_RULES environment variable. 
