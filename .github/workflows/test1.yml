@@ -26,10 +26,18 @@ jobs:
           ls -la test-semgrep
           mkdir __w/
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/basic_xss.yaml test-semgrep/xss/basic_xss.yaml.gpg
+          cd test-semgrep
+          #for FILE in *.*.gpg; do
+            #gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/"${FILE%.gpg}" "$FILE"
+          #done
+          gpg --decrypt-files *.gpg
+          mv *.yaml __w/
         env:
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       - name: listing the yaml file contents
-        run: cat __w/basic_xss.yaml
+        run: |
+          ls -la __w/
+          cat __w/basic_xss.yaml
       - uses: actions/upload-artifact@master
         with:
           name: my-path
