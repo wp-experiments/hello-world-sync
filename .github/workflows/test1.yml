@@ -31,7 +31,7 @@ jobs:
             gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/"${FILE%.gpg}" "$FILE"
           done
           pwd
-          #gpg --quiet --yes --passphrase="$PASSPHRASE" --decrypt-files *.yaml.gpg
+          #gpg --quiet --yes --passphrase="$PASSPHRASE" --decrypt-files *.gpg
           mv *.yaml __w/
         env:
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
