@@ -27,11 +27,11 @@ jobs:
           mkdir __w/
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/basic_xss.yaml test-semgrep/xss/basic_xss.yaml.gpg
           cd test-semgrep
-          #for FILE in *.*.gpg; do
-            #gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/"${FILE%.gpg}" "$FILE"
-          #done
+          for FILE in *.*.yaml.gpg; do
+            gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" --output __w/"${FILE%.gpg}" "$FILE"
+          done
           pwd
-          gpg --quiet --yes --passphrase="$PASSPHRASE" --decrypt-files *.yaml.gpg
+          #gpg --quiet --yes --passphrase="$PASSPHRASE" --decrypt-files *.yaml.gpg
           mv *.yaml __w/
         env:
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
