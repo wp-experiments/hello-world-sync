@@ -84,7 +84,7 @@ jobs:
         
       # Run the "semgrep ci" command on the command line of the docker image.
       - run: |
-          semgrep ci --disable-nosem  --verbose --sarif -o output.sarif
+          semgrep ci --disable-nosem  --verbose --sarif -o output.sarif || true
           ls -la 
           cat output.sarif
     
